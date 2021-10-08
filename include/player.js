@@ -11,7 +11,6 @@ const { VoiceConnectionStatus, entersState } = require("@discordjs/voice");
 module.exports = {
 	async playerManagerInteraction(interaction, videoId) {
 		const queue = interaction.client.queue.get(interaction.guildId);
-		console.log(queue.songs);
 		const connection = joinVoiceChannel({
 			channelId: interaction.member.voice.channel.id,
 			guildId: interaction.guildId,

@@ -1,18 +1,19 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
-const { joinVoiceChannel } = require("@discordjs/voice");
 const ytdl = require("ytdl-core");
 const { playerManagerInteraction } = require("../include/player");
 
 module.exports = {
 	name: "play",
 	commandBuilder: new SlashCommandBuilder()
+		.setDescription("plays a Youtube song/link")
 		.setName("play")
-		.setDescription("Plays a Youtube song")
-		.addStringOption((option) => option.setName("query").setRequired(true)),
+		.addStringOption((option) =>
+			option.setName("query").setDescription("᲼᲼").setRequired(true)
+		),
 
 	async executeInteraction(interaction) {
 		//Convenience variables
-		const url = interaction.options.getString("link");
+		const url = interaction.options.getString("query");
 		const serverQueue = interaction.client.queue.get(interaction.guildId);
 
 		//Regex stuff for matching
@@ -27,6 +28,18 @@ module.exports = {
 				"❌ Please provide a valid youtube link, Playlists are currently not supported."
 			);
 			return;
+		}
+
+		if (getVoiceConnection(interaction.guildId)) {
+			if (
+				!getVoiceConnection(interaction.guildId).joinConfig.channelId ===
+				interaction.member.voice.channelId
+			) {
+				interaction.reply(
+					"❌ Nekyo is currently being used in another channel ❌"
+				);
+				return;
+			}
 		}
 
 		//self explanatory

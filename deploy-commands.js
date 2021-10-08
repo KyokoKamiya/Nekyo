@@ -12,7 +12,6 @@ const cmdFiles = readdirSync(join(__dirname, "cmds")).filter((file) =>
 
 //setting up commands array for pushing
 let commands = [];
-
 //Loading commands from ./cmds and pushing commandBuilder to array
 for (const file of cmdFiles) {
 	const command = require(join(__dirname, "cmds", `${file}`));
