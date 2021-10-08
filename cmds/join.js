@@ -12,7 +12,7 @@ module.exports = {
 				.setDescription("enter a string")
 				.setRequired(true)
 		),
-	async executeInteracion(interaction) {
+	async executeInteraction(interaction) {
 		let channelId = interaction.member.voice.channel.id;
 		let guildId = interaction.guildId;
 		let adapterCreator = interaction.guild.voiceAdapterCreator;

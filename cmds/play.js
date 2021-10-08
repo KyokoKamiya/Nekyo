@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const ytdl = require("ytdl-core");
 const { playerManagerInteraction } = require("../include/player");
+const { getVoiceConnection } = require("@discordjs/voice");
 
 module.exports = {
 	name: "play",

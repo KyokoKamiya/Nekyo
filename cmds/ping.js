@@ -6,7 +6,7 @@ module.exports = {
 		.setName("ping")
 		.setDescription("🏓 in ms"),
 
-	async execute(interaction) {
+	async executeInteraction(interaction) {
 		interaction.reply({
 			content: `🏓Latency is ${Date.now() - interaction.createdTimestamp}ms`,
 			ephemeral: true,
