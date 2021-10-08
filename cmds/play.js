@@ -11,7 +11,6 @@ module.exports = {
 		.addStringOption((option) => option.setName("query").setRequired(true)),
 
 	async executeInteraction(interaction) {
-		// ❌
 		//Convenience variables
 		const url = interaction.options.getString("link");
 		const serverQueue = interaction.client.queue.get(interaction.guildId);
@@ -24,7 +23,9 @@ module.exports = {
 		//Check if link is valid
 		const urlValid = videoPattern.test(url);
 		if (!urlValid) {
-			interaction.reply("❌ Please provide a valid link");
+			interaction.reply(
+				"❌ Please provide a valid youtube link, Playlists are currently not supported."
+			);
 			return;
 		}
 
@@ -55,15 +56,17 @@ module.exports = {
 			}
 		}
 		//If playlist exists, add song to end of playlist
-		console.log(serverQueue);
 		if (serverQueue) {
 			serverQueue.songs.push(song);
+			interaction.reply(
+				`🎶 Added ${queueConstruct.songs[0].title} to the queue! 🎶`
+			);
 			return;
 		}
 
 		queueConstruct.songs.push(song);
 		interaction.client.queue.set(interaction.guildId, queueConstruct);
-
+		interaction.reply(`🎵 Now playing ${queueConstruct.songs[0].title} 🎵`);
 		playerManagerInteraction(interaction, url);
 	},
 	async execute(msg) {},

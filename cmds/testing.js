@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
+const { getVoiceConnection } = require("@discordjs/voice");
 const { execute } = require("./play");
 
 module.exports = {
@@ -8,7 +9,8 @@ module.exports = {
 		.setDescription("example format"),
 	async executeInteracion(interaction) {
 		console.log(interaction);
-		interaction.reply("This is just a test command you doodoohead");
+		interaction.reply("sent info to console.");
+		console.log(getVoiceConnection(interaction.guildId));
 	},
 	async execute(msg) {},
 };
