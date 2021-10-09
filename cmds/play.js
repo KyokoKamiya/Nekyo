@@ -31,11 +31,11 @@ module.exports = {
 			return;
 		}
 
+		//check if user and Nekyo are in the same voice channel
 		if (getVoiceConnection(interaction.guildId)) {
-			if (
-				!getVoiceConnection(interaction.guildId).joinConfig.channelId ===
-				interaction.member.voice.channelId
-			) {
+			let testStatus = getVoiceConnection(interaction.guildId).packets.state
+				.channel_id;
+			if (testStatus !== interaction.member.voice.channelId) {
 				interaction.reply(
 					"❌ Nekyo is currently being used in another channel ❌"
 				);
@@ -72,9 +72,7 @@ module.exports = {
 		//If playlist exists, add song to end of playlist
 		if (serverQueue) {
 			serverQueue.songs.push(song);
-			interaction.reply(
-				`🎶 Added ${queueConstruct.songs[0].title} to the queue! 🎶`
-			);
+			interaction.reply(`🎶 Added ${song.title} to the queue! 🎶`);
 			return;
 		}
 
