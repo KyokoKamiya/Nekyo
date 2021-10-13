@@ -1,13 +1,12 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 
 module.exports = {
-	name: "format",
+	name: "queue",
 	commandBuilder: new SlashCommandBuilder()
-		.setName("format")
-		.setDescription("example format"),
+		.setName("queue")
+		.setDescription("Show song queue"),
 	async executeInteraction(interaction) {
-		interaction.reply("sent info to console.");
-		console.log(interaction);
+		interaction.reply("WIP");
 	},
 	async execute(msg) {},
 };

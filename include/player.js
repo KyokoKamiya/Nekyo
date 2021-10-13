@@ -28,7 +28,13 @@ module.exports = {
 		player.play(resource);
 		connection.subscribe(player);
 
+		//If song finished, cycle to the next song
 		player.on(AudioPlayerStatus.Idle, async () => {
+			if (queue.songs.length == 1) {
+				queue.channel.send("❌ No more songs in queue");
+				return;
+			}
+
 			if (queue.loop) {
 				let lastSong = queue.songs.shift();
 				queue.songs.push(lastSong);
@@ -46,6 +52,36 @@ module.exports = {
 					}
 				)
 			);
+
+			queue.channel.send(`🎵 Now playing ${queue.songs[0].title} 🎵`);
+		});
+
+		interaction.client.on("commandSkip", async (skipInteraction) => {
+			//If last song in queue
+			if (queue.songs.length == 1) {
+				skipInteraction.reply("❌ No more songs in queue to skip to.");
+				return;
+			}
+
+			if (queue.loop) {
+				let lastSong = queue.songs.shift();
+				queue.songs.push(lastSong);
+			} else {
+				queue.songs.shift();
+			}
+
+			player.play(
+				createAudioResource(
+					ytdl(queue.songs[0].url, {
+						filter: "audioonly",
+					}),
+					{
+						inputType: StreamType.Arbitrary,
+					}
+				)
+			);
+
+			skipInteraction.reply(`🎵 Now playing ${queue.songs[0].title} 🎵`);
 		});
 
 		connection.on(

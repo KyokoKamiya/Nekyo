@@ -31,7 +31,7 @@ module.exports = {
 			return;
 		}
 
-		//check if user and Nekyo are in the same voice channel
+		//check if user and client are in the same voice channel
 		if (getVoiceConnection(interaction.guildId)) {
 			let testStatus = getVoiceConnection(interaction.guildId).packets.state
 				.channel_id;
