@@ -32,6 +32,7 @@ module.exports = {
 		player.on(AudioPlayerStatus.Idle, async () => {
 			if (queue.songs.length == 1) {
 				queue.channel.send("❌ No more songs in queue");
+				interaction.client.queue.delete(interaction.guildId);
 				return;
 			}
 

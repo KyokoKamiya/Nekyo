@@ -78,8 +78,14 @@ module.exports = {
 
 		queueConstruct.songs.push(song);
 		interaction.client.queue.set(interaction.guildId, queueConstruct);
+		try {
+			playerManagerInteraction(interaction, url);
+		} catch (error) {
+			interaction.reply(
+				"❌ An unknown error has ocurred, Most likely i don't have permissions to join your channel "
+			);
+		}
 		interaction.reply(`🎵 Now playing ${queueConstruct.songs[0].title} 🎵`);
-		playerManagerInteraction(interaction, url);
 	},
 	async execute(msg) {},
 };
