@@ -1,6 +1,6 @@
 const { REST } = require("@discordjs/rest");
 const { Routes } = require("discord-api-types/v9");
-const { clientID, guildID, token } = require("./config.json");
+const { clientID, guildID } = require("./config.json");
 const { readdirSync } = require("fs");
 const { join } = require("path");
 const dotenv = require("dotenv").config();
