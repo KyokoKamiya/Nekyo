@@ -3,6 +3,7 @@ const { Client, Intents, Collection, ClientUser } = require("discord.js");
 const { readdirSync } = require("fs");
 const { join } = require("path");
 const dotenv = require("dotenv").config();
+const deployCommands = require("./deploy-commands");
 
 // Create a new client instance
 const client = new Client({
@@ -37,6 +38,7 @@ if (process.env.DEBUG === "1") {
 
 // When the client is ready, run this code (only once)
 client.once("ready", () => {
+	deployCommands();
 	console.log(`Logged in as ${client.user.tag}`);
 
 	client.user.setActivity(`Your Commands ♥`, { type: "LISTENING" });

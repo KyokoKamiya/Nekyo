@@ -11,6 +11,7 @@ const { VoiceConnectionStatus, entersState } = require("@discordjs/voice");
 module.exports = {
 	async playerManagerInteraction(interaction, videoId) {
 		const queue = interaction.client.queue.get(interaction.guildId);
+		const videoInfo = await ytdl.getInfo(videoId);
 		const connection = joinVoiceChannel({
 			channelId: interaction.member.voice.channel.id,
 			guildId: interaction.guildId,
@@ -18,7 +19,11 @@ module.exports = {
 		});
 
 		const stream = ytdl(videoId, {
-			filter: "audioonly",
+			filter: videoInfo.videoDetails.isLiveContent ? null : "audioonly",
+			quality: videoInfo.videoDetails.isLiveContent ? null : "highestaudio",
+			dlChunkSize: 0,
+			liveBuffer: 1000,
+			isHLS: videoInfo.videoDetails.isLiveContent,
 		});
 		const resource = createAudioResource(stream, {
 			inputType: StreamType.Arbitrary,
@@ -27,6 +32,25 @@ module.exports = {
 
 		player.play(resource);
 		connection.subscribe(player);
+
+		player.on("debug", (bla) => {
+			console.log(bla);
+		});
+		// player.on("stateChange", (bli) => {
+		// 	console.log(bli);
+		// });
+		stream.on("end", (asdf) => {
+			console.log(asdf);
+		});
+		stream.on("close", (asdf) => {
+			console.log(asdf);
+		});
+		stream.on("error", (asdf) => {
+			console.log(asdf);
+		});
+		// stream.on("data", (data) => {
+		// 	console.log(data);
+		// });
 
 		//If song finished, cycle to the next song
 		player.on(AudioPlayerStatus.Idle, async () => {
@@ -46,7 +70,11 @@ module.exports = {
 			player.play(
 				createAudioResource(
 					ytdl(queue.songs[0].url, {
-						filter: "audioonly",
+						filter: queue.songs[0].live ? null : "audioonly",
+						quality: queue.songs[0].live ? null : "highestaudio",
+						dlChunkSize: 0,
+						liveBuffer: 500,
+						isHLS: queue.songs[0].live,
 					}),
 					{
 						inputType: StreamType.Arbitrary,
@@ -74,7 +102,11 @@ module.exports = {
 			player.play(
 				createAudioResource(
 					ytdl(queue.songs[0].url, {
-						filter: "audioonly",
+						filter: queue.songs[0].live ? null : "audioonly",
+						quality: queue.songs[0].live ? null : "highestaudio",
+						dlChunkSize: 0,
+						liveBuffer: 1000,
+						isHLS: queue.songs[0].live,
 					}),
 					{
 						inputType: StreamType.Arbitrary,

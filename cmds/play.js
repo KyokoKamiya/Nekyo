@@ -61,6 +61,7 @@ module.exports = {
 					title: videoInfo.videoDetails.title,
 					url: videoInfo.videoDetails.video_url,
 					duration: videoInfo.videoDetails.lengthSeconds,
+					live: videoInfo.videoDetails.isLiveContent,
 				};
 			} catch (err) {
 				console.log(err);
