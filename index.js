@@ -40,6 +40,7 @@ if (process.env.DEBUG === "1") {
 client.once("ready", () => {
 	deployCommands();
 	console.log(`Logged in as ${client.user.tag}`);
+	console.log(`Listening to ${client.guilds.cache.size} servers`);
 
 	client.user.setActivity(`Your Commands ♥`, { type: "LISTENING" });
 
@@ -60,9 +61,7 @@ const cmdFiles = readdirSync(join(__dirname, "cmds")).filter((file) =>
 for (const file of cmdFiles) {
 	const command = require(join(__dirname, "cmds", `${file}`));
 	client.commands.set(command.name, command);
-	if (client.kDebug) {
-		console.log(`Imported command ${command.name}`);
-	}
+	console.log(`Imported command ${command.name}`);
 }
 
 //On command receive
@@ -72,11 +71,12 @@ client.on("interactionCreate", async (interaction) => {
 
 	//Check which command it corresponds to
 	const command = client.commands.get(interaction.commandName);
-	if (client.kDebug) {
-		console.log(
-			`Received ${interaction.commandName} | ${interaction.member.user.tag} | ${interaction.guild.name}`
-		);
-	}
+
+	//Output executed commands to console
+	console.log(
+		`Received ${interaction.commandName} | ${interaction.member.user.tag} | ${interaction.guild.name}`
+	);
+
 	//Try executing command
 	try {
 		await command.executeInteraction(interaction);
@@ -117,6 +117,7 @@ client.on("messageCreate", (message) => {
 			(cmd) => cmd.aliases && cmd.aliases.includes(commandName)
 		);
 
+	//If command doesn't exist output to console
 	if (!command) {
 		console.log(
 			`❌ ${commandName} | ${message.member.user.tag} | ${message.guild.name} ❌`
@@ -124,11 +125,11 @@ client.on("messageCreate", (message) => {
 		return;
 	}
 
-	if (client.kDebug) {
-		console.log(
-			`Received ${commandName} | ${message.member.user.tag} | ${message.guild.name}`
-		);
-	}
+	//output executed commands to console
+	console.log(
+		`Received ${commandName} | ${message.member.user.tag} | ${message.guild.name}`
+	);
+
 	//try executing command
 	try {
 		command.execute(message, args);

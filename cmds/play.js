@@ -13,7 +13,7 @@ module.exports = {
 			option.setName("query").setDescription("᲼᲼").setRequired(true)
 		),
 
-	async executeInteraction(interaction) {
+	async executeInteraction(interaction, args, type) {
 		//Convenience variables
 		const url = interaction.options.getString("query");
 		const serverQueue = interaction.client.queue.get(interaction.guildId);
@@ -44,7 +44,7 @@ module.exports = {
 			}
 		}
 
-		//self explanatory
+		//setting up serverQueue
 		const queueConstruct = {
 			songs: [],
 			loop: false,
@@ -71,13 +71,14 @@ module.exports = {
 				return null;
 			}
 		}
-		//If playlist exists, add song to end of playlist
+		//If serverQueue exists, add song to end of playlist
 		if (serverQueue) {
 			serverQueue.songs.push(song);
 			interaction.reply(`🎶 Added ${song.title} to the queue! 🎶`);
 			return;
 		}
 
+		//If serverQueue doesn't exist, start player
 		queueConstruct.songs.push(song);
 		interaction.client.queue.set(interaction.guildId, queueConstruct);
 		try {
