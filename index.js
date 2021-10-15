@@ -49,7 +49,7 @@ client.once("ready", () => {
 
 // Send errors to console
 client.on("warn", (info) => console.log(info));
-client.on("error", console.error);
+client.on("error", (err) => console.log(err));
 
 // Load Commands
 const cmdFiles = readdirSync(join(__dirname, "cmds")).filter((file) =>
@@ -81,49 +81,61 @@ client.on("interactionCreate", async (interaction) => {
 	} catch (error) {
 		console.log(error);
 		await interaction.reply({
-			content: "There was an error while executing this command!",
+			content: "❌ There was an error while executing this command! ❌",
 			ephemeral: true,
 		});
 	}
 });
 
 //on Message event
-// client.on("message", (message) => {
-// 	// Return if message is from bot or a DM
-// 	console.log("testing");
-// 	if (message.author.bot) return;
-// 	if (!message.guild) return;
+client.on("messageCreate", (message) => {
+	//variables and functions
+	const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-// 	//If Message doesn't contain Prefix or Bot mention, return
-// 	const prefixRegex = new RegExp(
-// 		`^(<@!?${client.user.id}>|${escapeRegex("!")})\\s*`
-// 	);
-// 	console.log(!prefixRegex.test(message.content));
-// 	if (!prefixRegex.test(message.content)) return;
+	// Return if message is from bot or a DM
+	if (message.author.bot) return;
+	if (!message.guild) return;
 
-// 	// Slice message into useful variables
-// 	const [, matchedPrefix] = message.content.match(prefixRegex);
+	//If Message doesn't contain Prefix or Bot mention, return
+	const prefixRegex = new RegExp(
+		`^(<@!?${client.user.id}>|${escapeRegex("!")})\\s*`
+	);
+	if (!prefixRegex.test(message.content)) return;
 
-// 	const args = message.content.slice(matchedPrefix.length).trim().split(/ +/);
-// 	const commandName = args.shift().toLowerCase();
+	// Slice message into useful variables
+	const [, matchedPrefix] = message.content.match(prefixRegex);
 
-// 	//Check if command exists
-// 	const commands =
-// 		client.commands.get(commandName) ||
-// 		client.commands.find(
-// 			(cmd) => cmd.aliases && cmd.aliases.includes(commandName)
-// 		);
+	const args = message.content.slice(matchedPrefix.length).trim().split(/ +/);
+	const commandName = args.shift().toLowerCase();
 
-// 	if (!command) return;
+	//Check if command exists
+	const command =
+		client.commands.get(commandName) ||
+		client.commands.find(
+			(cmd) => cmd.aliases && cmd.aliases.includes(commandName)
+		);
 
-// 	try {
-// 		command.execute(message, args);
-// 	} catch (error) {
-// 		console.error(error);
-// 		message
-// 			.reply("Unkown Error, please contact <@687013516451774621>")
-// 			.catch(console.error);
-// 	}
-// });
+	if (!command) {
+		console.log(
+			`❌ ${commandName} | ${message.member.user.tag} | ${message.guild.name} ❌`
+		);
+		return;
+	}
+
+	if (client.kDebug) {
+		console.log(
+			`Received ${commandName} | ${message.member.user.tag} | ${message.guild.name}`
+		);
+	}
+	//try executing command
+	try {
+		command.execute(message, args);
+	} catch (error) {
+		console.error(error);
+		message
+			.reply("❌ There was an error while executing this command! ❌")
+			.catch(console.error);
+	}
+});
 
 client.login(process.env.TOKEN);

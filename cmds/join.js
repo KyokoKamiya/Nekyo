@@ -3,6 +3,7 @@ const { joinVoiceChannel, AudioPlayer } = require("@discordjs/voice");
 
 module.exports = {
 	name: "join",
+	aliases: [],
 	commandBuilder: new SlashCommandBuilder()
 		.setName("join")
 		.setDescription("cummies")

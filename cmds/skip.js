@@ -3,6 +3,7 @@ const { getVoiceConnection } = require("@discordjs/voice");
 
 module.exports = {
 	name: "skip",
+	aliases: [],
 	commandBuilder: new SlashCommandBuilder()
 		.setName("skip")
 		.setDescription("skips current song"),

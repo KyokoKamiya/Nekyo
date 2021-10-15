@@ -3,6 +3,7 @@ const { getVoiceConnection } = require("@discordjs/voice");
 
 module.exports = {
 	name: "leave",
+	aliases: [],
 	commandBuilder: new SlashCommandBuilder()
 		.setName("leave")
 		.setDescription("Stop playing music and leave channel"),

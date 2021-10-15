@@ -5,6 +5,7 @@ const { getVoiceConnection } = require("@discordjs/voice");
 
 module.exports = {
 	name: "play",
+	aliases: [],
 	commandBuilder: new SlashCommandBuilder()
 		.setDescription("plays a Youtube song/link")
 		.setName("play")

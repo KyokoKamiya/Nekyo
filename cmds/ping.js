@@ -2,6 +2,7 @@ const { SlashCommandBuilder } = require("@discordjs/builders");
 
 module.exports = {
 	name: "ping",
+	aliases: [],
 	commandBuilder: new SlashCommandBuilder()
 		.setName("ping")
 		.setDescription("🏓 in ms"),
