@@ -13,7 +13,7 @@ module.exports = {
 			option.setName("query").setDescription("᲼᲼").setRequired(true)
 		),
 
-	async executeInteraction(interaction, args, type) {
+	async executeInteraction(interaction) {
 		//Convenience variables
 		const url = interaction.options.getString("query");
 		const serverQueue = interaction.client.queue.get(interaction.guildId);
