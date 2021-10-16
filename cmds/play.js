@@ -66,7 +66,7 @@ module.exports = {
 			} catch (err) {
 				console.log(err);
 				interaction.reply(
-					"❌ An unexpected error happened while trying to fetch your video"
+					"❌ The video you tried to play is age-restricted"
 				);
 				return null;
 			}

@@ -26,7 +26,7 @@ module.exports = function deployCommands() {
 	const rest = new REST({ version: "9" }).setToken(process.env.TOKEN);
 
 	rest
-		.put(Routes.applicationGuildCommands(clientID, guildID), {
+		.put(Routes.applicationCommands(clientID), {
 			body: commands,
 		})
 		.then(() => console.log("Successfully registered application commands."))
