@@ -38,9 +38,6 @@ module.exports = {
 		//create audio player
 		const player = createAudioPlayer();
 
-		//set volume
-		resource.volume.setVolume(0.5);
-
 		// make player play to audioresource(stream)
 		player.play(resource);
 
