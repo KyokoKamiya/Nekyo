@@ -38,25 +38,32 @@ module.exports = {
 		//create audio player
 		const player = createAudioPlayer();
 
-		// make player play to audioresource(stream)
-		player.play(resource);
+		try {
+			// make player play to audioresource(stream)
+			player.play(resource);
 
-		// subscripe voice connection to player
-		connection.subscribe(player);
+			// subscripe voice connection to player
+			connection.subscribe(player);
+		} catch (err) {
+			console.log(err);
+		}
 
 		//Debug and error handling stuff
-		player.on("debug", (bla) => {
-			console.log(bla);
-		});
+		// player.on("debug", (bla) => {
+		// 	console.log(bla);
+		// });
 		// player.on("stateChange", (bli) => {
 		// 	console.log(bli);
 		// });
-		stream.on("end", (asdf) => {
-			console.log(asdf);
+		player.on("error", (err) => {
+			console.log(err);
 		});
-		stream.on("close", (asdf) => {
-			console.log(asdf);
-		});
+		// stream.on("end", (asdf) => {
+		// 	console.log(asdf);
+		// });
+		// stream.on("close", (asdf) => {
+		// 	console.log(asdf);
+		// });
 		stream.on("error", (asdf) => {
 			console.log(asdf);
 		});
@@ -81,30 +88,38 @@ module.exports = {
 				queue.songs.shift();
 			}
 
-			//play new audio resource
-			player.play(
-				createAudioResource(
-					ytdl(queue.songs[0].url, {
-						filter: queue.songs[0].live ? null : "audioonly",
-						quality: queue.songs[0].live ? null : "highestaudio",
-						dlChunkSize: 0,
-						liveBuffer: 500,
-						isHLS: queue.songs[0].live,
-					}),
-					{
-						inputType: StreamType.Arbitrary,
-					}
-				)
-			);
+			try {
+				player.stop();
 
+				//play new audio resource
+				player.play(
+					createAudioResource(
+						ytdl(queue.songs[0].url, {
+							filter: queue.songs[0].live ? null : "audioonly",
+							quality: queue.songs[0].live ? null : "highestaudio",
+							dlChunkSize: 0,
+							liveBuffer: 500,
+							isHLS: queue.songs[0].live,
+						}),
+						{
+							inputType: StreamType.Arbitrary,
+						}
+					)
+				);
+			} catch (err) {
+				console.log(err);
+			}
 			queue.channel.send(`🎵 Now playing ${queue.songs[0].title} 🎵`);
 		});
 
 		//if skip command is received
-		interaction.client.on("commandSkip", async (skipInteraction) => {
+		interaction.client.on("commandSkip", async (interaction) => {
+			interaction.reply(`⏩ Skipped ${queue.songs[0].title} ⏩ `);
+
 			//If last song in queue
 			if (queue.songs.length == 1) {
-				skipInteraction.reply("❌ No more songs in queue to skip to.");
+				interaction.client.queue.delete(interaction.guildId);
+				player.stop();
 				return;
 			}
 
@@ -115,24 +130,28 @@ module.exports = {
 			} else {
 				queue.songs.shift();
 			}
+			try {
+				player.stop();
 
-			//play new resource
-			player.play(
-				createAudioResource(
-					ytdl(queue.songs[0].url, {
-						filter: queue.songs[0].live ? null : "audioonly",
-						quality: queue.songs[0].live ? null : "highestaudio",
-						dlChunkSize: 0,
-						liveBuffer: 1000,
-						isHLS: queue.songs[0].live,
-					}),
-					{
-						inputType: StreamType.Arbitrary,
-					}
-				)
-			);
-
-			skipInteraction.reply(`🎵 Now playing ${queue.songs[0].title} 🎵`);
+				//play new resource
+				player.play(
+					createAudioResource(
+						ytdl(queue.songs[0].url, {
+							filter: queue.songs[0].live ? null : "audioonly",
+							quality: queue.songs[0].live ? null : "highestaudio",
+							dlChunkSize: 0,
+							liveBuffer: 1000,
+							isHLS: queue.songs[0].live,
+						}),
+						{
+							inputType: StreamType.Arbitrary,
+						}
+					)
+				);
+			} catch (err) {
+				console.log(err);
+			}
+			queue.channel.send(`🎵 Now playing ${queue.songs[0].title} 🎵`);
 		});
 
 		//disconnect handling
