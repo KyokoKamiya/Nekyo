@@ -18,12 +18,23 @@ module.exports = {
 		if (getVoiceConnection(interaction.guildId)) {
 			let testStatus = getVoiceConnection(interaction.guildId).packets.state
 				.channel_id;
+
 			if (testStatus !== interaction.member.voice.channelId) {
 				interaction.reply(
 					"❌ Nekyo is currently being used in another channel ❌"
 				);
 				return;
 			}
+		}
+
+		//If Queue is empty
+		const queue = await interaction.client.queue.get(interaction.guildId);
+
+		if (!queue) {
+			interaction.reply(
+				"❌ There are no more songs in the queue to skip to."
+			);
+			return;
 		}
 
 		// Send emit to player.js with relevant data
