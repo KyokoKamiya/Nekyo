@@ -36,7 +36,7 @@ module.exports = {
 			inlineVolume: true,
 		});
 
-		resource.volume.setVolume(0.2);
+		resource.volume.setVolume(0.1);
 
 		//create audio player
 		const player = createAudioPlayer();
@@ -108,7 +108,7 @@ module.exports = {
 					}
 				);
 
-				newResource.volume.setVolume(0.2);
+				newResource.volume.setVolume(0.1);
 
 				//play new audio resource
 				player.play(newResource);
@@ -153,7 +153,7 @@ module.exports = {
 					}
 				);
 
-				newResource.volume.setVolume(0.2);
+				newResource.volume.setVolume(0.1);
 				//play new resource
 				player.play(newResource);
 			} catch (err) {
