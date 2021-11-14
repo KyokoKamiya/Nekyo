@@ -33,7 +33,10 @@ module.exports = {
 		//create audio resource from stream
 		const resource = createAudioResource(stream, {
 			inputType: StreamType.Arbitrary,
+			inlineVolume: true,
 		});
+
+		resource.volume.setVolume(0.2);
 
 		//create audio player
 		const player = createAudioPlayer();
@@ -91,21 +94,24 @@ module.exports = {
 			try {
 				player.stop();
 
-				//play new audio resource
-				player.play(
-					createAudioResource(
-						ytdl(queue.songs[0].url, {
-							filter: queue.songs[0].live ? null : "audioonly",
-							quality: queue.songs[0].live ? null : "highestaudio",
-							dlChunkSize: 0,
-							liveBuffer: 500,
-							isHLS: queue.songs[0].live,
-						}),
-						{
-							inputType: StreamType.Arbitrary,
-						}
-					)
+				let newResource = createAudioResource(
+					ytdl(queue.songs[0].url, {
+						filter: queue.songs[0].live ? null : "audioonly",
+						quality: queue.songs[0].live ? null : "highestaudio",
+						dlChunkSize: 0,
+						liveBuffer: 1000,
+						isHLS: queue.songs[0].live,
+					}),
+					{
+						inputType: StreamType.Arbitrary,
+						inlineVolume: true,
+					}
 				);
+
+				newResource.volume.setVolume(0.2);
+
+				//play new audio resource
+				player.play(newResource);
 			} catch (err) {
 				console.log(err);
 			}
@@ -133,21 +139,23 @@ module.exports = {
 			try {
 				player.stop();
 
-				//play new resource
-				player.play(
-					createAudioResource(
-						ytdl(queue.songs[0].url, {
-							filter: queue.songs[0].live ? null : "audioonly",
-							quality: queue.songs[0].live ? null : "highestaudio",
-							dlChunkSize: 0,
-							liveBuffer: 1000,
-							isHLS: queue.songs[0].live,
-						}),
-						{
-							inputType: StreamType.Arbitrary,
-						}
-					)
+				let newResource = createAudioResource(
+					ytdl(queue.songs[0].url, {
+						filter: queue.songs[0].live ? null : "audioonly",
+						quality: queue.songs[0].live ? null : "highestaudio",
+						dlChunkSize: 0,
+						liveBuffer: 1000,
+						isHLS: queue.songs[0].live,
+					}),
+					{
+						inputType: StreamType.Arbitrary,
+						inlineVolume: true,
+					}
 				);
+
+				newResource.volume.setVolume(0.2);
+				//play new resource
+				player.play(newResource);
 			} catch (err) {
 				console.log(err);
 			}

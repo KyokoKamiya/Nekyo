@@ -133,6 +133,11 @@ module.exports = {
 				`🎶 Added ${queueConstruct.songs.length} songs to the Queue!🎶`
 			);
 		}
+		if (!isPlaylist) {
+			interaction.reply(
+				`🎵 Added ${queueConstruct.songs[0].title} to the queue! 🎵`
+			);
+		}
 		interaction.channel.send(
 			`🎵 Now playing ${queueConstruct.songs[0].title} 🎵`
 		);
