@@ -6,7 +6,7 @@ const ytpl = require("ytpl");
 
 module.exports = {
 	name: "play",
-	aliases: [],
+	aliases: ["p"],
 	commandBuilder: new SlashCommandBuilder()
 		.setDescription("plays a Youtube song/link")
 		.setName("play")
