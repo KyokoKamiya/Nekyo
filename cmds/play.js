@@ -6,7 +6,7 @@ const ytpl = require("ytpl");
 
 module.exports = {
 	name: "play",
-	aliases: [],
+	aliases: ["p"],
 	commandBuilder: new SlashCommandBuilder()
 		.setDescription("plays a Youtube song/link")
 		.setName("play")
@@ -33,9 +33,7 @@ module.exports = {
 		//Check if link is valid
 		const urlValid = videoPattern.test(url);
 		if (!urlValid) {
-			interaction.reply(
-				"❌ Please provide a valid youtube link, Playlists are currently not supported."
-			);
+			interaction.reply("❌ Please provide a valid youtube link");
 			return;
 		}
 

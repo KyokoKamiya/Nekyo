@@ -81,6 +81,7 @@ client.on("interactionCreate", async (interaction) => {
 	try {
 		await command.executeInteraction(interaction);
 	} catch (error) {
+		console.log("Catch'ed error: ");
 		console.log(error);
 		await interaction.reply({
 			content: "❌ There was an error while executing this command! ❌",
@@ -134,6 +135,7 @@ client.on("messageCreate", (message) => {
 	try {
 		command.execute(message, args);
 	} catch (error) {
+		console.log("Catch'ed error: ");
 		console.error(error);
 		message
 			.reply("❌ There was an error while executing this command! ❌")
