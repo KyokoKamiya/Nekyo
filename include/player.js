@@ -25,7 +25,6 @@ module.exports = {
 		const stream = ytdl(videoId, {
 			filter: videoInfo.videoDetails.isLiveContent ? null : "audioonly",
 			quality: videoInfo.videoDetails.isLiveContent ? null : "highestaudio",
-			dlChunkSize: 0,
 			liveBuffer: 1000,
 			isHLS: videoInfo.videoDetails.isLiveContent,
 		});
