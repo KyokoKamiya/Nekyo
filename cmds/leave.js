@@ -11,12 +11,17 @@ module.exports = {
 		const connection = getVoiceConnection(interaction.guild.id);
 
 		//delete queue when disconnecting
-		interaction.client.queue.delete(interaction.guildId);
+		try {
+			interaction.client.queue.delete(interaction.guildId);
 
-		//disconnect
-		connection.destroy();
+			//disconnect
+			connection.destroy();
 
-		//reply to user
-		interaction.reply("Goodbye!👋");
+			//reply to user
+			interaction.reply("Goodbye!👋");
+		} catch (error) {
+			console.log("Error on leave command:");
+			console.log(error);
+		}
 	},
 };

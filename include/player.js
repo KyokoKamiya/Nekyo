@@ -97,7 +97,6 @@ module.exports = {
 					ytdl(queue.songs[0].url, {
 						filter: queue.songs[0].live ? null : "audioonly",
 						quality: queue.songs[0].live ? null : "highestaudio",
-						dlChunkSize: 0,
 						liveBuffer: 1000,
 						isHLS: queue.songs[0].live,
 					}),
@@ -119,46 +118,49 @@ module.exports = {
 
 		//if skip command is received
 		interaction.client.on("commandSkip", async (interaction) => {
-			interaction.reply(`⏩ Skipped ${queue.songs[0].title} ⏩ `);
-
-			//If last song in queue
-			if (queue.songs.length == 1) {
-				interaction.client.queue.delete(interaction.guildId);
-				player.stop();
-				return;
-			}
-
-			//check if loop
-			if (queue.loop) {
-				let lastSong = queue.songs.shift();
-				queue.songs.push(lastSong);
-			} else {
-				queue.songs.shift();
-			}
 			try {
-				player.stop();
+				interaction.reply(`⏩ Skipped ${queue.songs[0].title} ⏩ `);
 
-				let newResource = createAudioResource(
-					ytdl(queue.songs[0].url, {
-						filter: queue.songs[0].live ? null : "audioonly",
-						quality: queue.songs[0].live ? null : "highestaudio",
-						dlChunkSize: 0,
-						liveBuffer: 1000,
-						isHLS: queue.songs[0].live,
-					}),
-					{
-						inputType: StreamType.Arbitrary,
-						inlineVolume: true,
-					}
-				);
+				//If last song in queue
+				if (queue.songs.length == 1) {
+					interaction.client.queue.delete(interaction.guildId);
+					player.stop();
+					return;
+				}
 
-				newResource.volume.setVolume(0.1);
-				//play new resource
-				player.play(newResource);
-			} catch (err) {
-				console.log(err);
+				//check if loop
+				if (queue.loop) {
+					let lastSong = queue.songs.shift();
+					queue.songs.push(lastSong);
+				} else {
+					queue.songs.shift();
+				}
+				try {
+					player.stop();
+
+					let newResource = createAudioResource(
+						ytdl(queue.songs[0].url, {
+							filter: queue.songs[0].live ? null : "audioonly",
+							quality: queue.songs[0].live ? null : "highestaudio",
+							liveBuffer: 1000,
+							isHLS: queue.songs[0].live,
+						}),
+						{
+							inputType: StreamType.Arbitrary,
+							inlineVolume: true,
+						}
+					);
+
+					newResource.volume.setVolume(0.1);
+					//play new resource
+					player.play(newResource);
+				} catch (err) {
+					console.log(err);
+				}
+				queue.channel.send(`🎵 Now playing ${queue.songs[0].title} 🎵`);
+			} catch (error) {
+				console.log(error);
 			}
-			queue.channel.send(`🎵 Now playing ${queue.songs[0].title} 🎵`);
 		});
 
 		//disconnect handling
